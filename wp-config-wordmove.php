@@ -1,0 +1,91 @@
+#!/usr/bin/php
+<?php
+
+function startsWith($haystack, $needle) {
+	return $needle === "" || strpos($haystack, $needle) === 0;
+}
+
+if ($argc != 3 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
+?>
+
+wp-config-wordmove.php V 1.0
+This script generate a wp-config with the data of movefile (WordMove).
+Made by Mte90 - http://www.mte90.net
+
+  Usage:
+  <?php echo $argv[0]; ?> [local|staging|production|etc] [ftp]
+  
+  The parameter it's needed for generate the wp-config by Movefile.
+  With the second parameter upload the file generated via ftp to the host.
+  With the --help, -help, -h, or -? options, you can get this help.
+
+<?php
+} else {
+	if(file_exists('Movefile')) {
+		//Read the movefile
+		$movefile = yaml_parse(file_get_contents('Movefile'));
+		//Read the wp-config file of the folder
+		$wpconfig = file('wp-config.php');
+		if (array_key_exists($argv[1],$movefile)) {
+			//Replace the content!
+			for ($i = 11; $i <= 30; $i++) {
+				if(startsWith($wpconfig[$i],"define('DB_NAME")) {
+					$wpconfig[$i] = "define('DB_NAME', '".$movefile[$argv[1]]['database']['name']."');\n";
+				}
+				
+				if(startsWith($wpconfig[$i],"define('DB_USER")) {
+					$wpconfig[$i] = "define('DB_USER', '".$movefile[$argv[1]]['database']['user']."');\n";
+				}
+				
+				if(startsWith($wpconfig[$i],"define('DB_PASSWORD")) {
+					$wpconfig[$i] = "define('DB_PASSWORD', '".$movefile[$argv[1]]['database']['password']."');\n";
+				}
+				
+				if(startsWith($wpconfig[$i],"define('DB_HOST")) {
+					$wpconfig[$i] = "define('DB_HOST', '".$movefile[$argv[1]]['database']['host']."');\n";
+				}
+			}
+				
+			echo 'File wp-config-'.$argv[1].'.php generated!'."\n";
+			//Save the file with a prefix of the host
+			if($argv[1] != 'local') {
+				file_put_contents('wp-config-'.$argv[1].'.php',$wpconfig);
+			} else {
+				file_put_contents('wp-config.php',$wpconfig);
+			}
+			
+			//Connect to the host and upload the wp-config generated
+			if ($argv[2] == 'ftp') {
+				if ($argv[1] != 'local') {
+					echo 'Logging on the server...'."\n";
+					
+					$connection = ftp_connect($movefile[$argv[1]]['ftp']['host'], 21) 
+					or die ('It\'s not possible connect to the server');
+					
+					ftp_login($connection, $movefile[$argv[1]]['ftp']['user'], $movefile[$argv[1]]['ftp']['password']) 
+					or die('Username or password wrong.');
+					
+					//Upload the file and overwrite if exist on the host
+					$send = ftp_put($connection, 'wp-config.php', 'wp-config-'.$argv[1].'.php', FTP_ASCII);
+					
+					//remove the file generated
+					unlink('wp-config-'.$argv[1].'.php');
+					
+					echo (!$send) ? 'Upload Error!' : 'Upload Successful!'."\n";
+					
+					echo 'File wp-config-'.$argv[1].'.php removed!'."\n";
+				} else {
+					echo 'What are you doing? We are in local, I can not upload anything!'."\n";
+				}
+			}
+			
+			echo 'Good job by Mte90 and thanks to weLaika for WordMove!'."\n";
+		} else {
+			echo 'ERROR: Remote host not exist!'."\n".'Check your Movefile!'."\n";
+		}
+    } else {
+		echo 'ERROR: Missing Movefile!'."\n".'Generate it with `wordmove init`'."\n";
+    }
+}
+
+?>
