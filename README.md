@@ -7,12 +7,26 @@ Uh and can also upload it on ftp on the choosen host!
 * PHP-CLI
 * YAML (`pecl install yaml`)
 
+##Install
+
+Move this scripts to /usr/local/bin
+
 ##Syntax
 
-`wp-config-wordmove.php [local|staging|production|etc] [ftp]`
+##Wp Config Generator
+With this script you can generate the wp-config with the data of Movefile  
+
+`wordmove-wp-config [local|staging|production|etc] [ftp]`
 
 The first parameter it's needed for generate the wp-config by Movefile.  
 With the second parameter upload the file generated via ftp to the host.
+
+##Absolute Path
+With this script you insert the absolute_path in the Movefile  
+
+`wordmove-wp-config [local|staging|production|etc]`
+
+The first parameter it's needed for get the absolute path of the host and insert in the Movefile.  
 
 #License
 GPL GPL GPL GPL GPL GPL GPL GPL GPL GPL GPL GPL!  

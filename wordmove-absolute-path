@@ -1,0 +1,56 @@
+#!/usr/bin/php
+<?php
+ if ($argc == 1 || $argc > 3 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
+?>
+
+wordmove-absolute-path V 1.0
+With this script you insert the absolute_path in the Movefile
+Made by Mte90 - http://www.mte90.net
+
+  Usage:
+  <?php echo $argv[0]; ?> [local|staging|production|etc]
+  
+  The first parameter it's needed for get the absolute path of the host and insert in the Movefile.
+  With the --help, -help, -h, or -? options, you can get this help.
+
+<?php
+} else {
+	if(file_exists('Movefile')) {
+		//Read the movefile
+		$movefile = yaml_parse(file_get_contents('Movefile'));
+		if ($argv[1] != 'local') {
+			echo 'Logging on the server...'."\n";
+			
+			$connection = ftp_connect($movefile[$argv[1]]['ftp']['host'], 21) 
+			or die ('It\'s not possible connect to the server');
+			
+			ftp_login($connection, $movefile[$argv[1]]['ftp']['user'], $movefile[$argv[1]]['ftp']['password']) 
+			or die('Username or password wrong.');
+			
+			//The file that return the absolute path
+			file_put_contents('absolute.php','<?php echo dirname(__FILE__); ?>');
+			
+			//Upload the file and overwrite if exist on the host
+			$send = ftp_put($connection, 'absolute.php', 'absolute.php', FTP_ASCII);
+			
+			$absolute = file_get_contents($movefile[$argv[1]]['vhost'].'/absolute.php');
+			
+			//remove the file generated
+			unlink('absolute.php');
+			ftp_delete($connection, 'absolute.php');
+			
+			//Insert value
+			$movefile[$argv[1]]['wordpress_absolute_path'] = $absolute;
+			
+			$yaml = yaml_emit($movefile);
+			
+			file_put_contents('Movefile',$yaml);
+			
+			echo (!$send) ? 'Upload Error!'."\n" : 'Movefile updated!'."\n";
+			
+		} else {
+			echo 'What are you doing? We are in local, I can not check anything!'."\n";
+		}
+	}
+}
+?>

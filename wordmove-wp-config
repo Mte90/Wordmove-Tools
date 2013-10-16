@@ -8,7 +8,7 @@ function startsWith($haystack, $needle) {
 if ($argc == 1 || $argc > 3 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
 ?>
 
-wp-config-wordmove.php V 1.0
+wordmove-wp-config- V 1.0a
 This script generate a wp-config with the data of movefile (WordMove).
 Made by Mte90 - http://www.mte90.net
 
