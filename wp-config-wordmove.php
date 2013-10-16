@@ -5,7 +5,7 @@ function startsWith($haystack, $needle) {
 	return $needle === "" || strpos($haystack, $needle) === 0;
 }
 
-if ($argc != 3 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
+if ($argc == 1 || $argc > 3 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
 ?>
 
 wp-config-wordmove.php V 1.0
@@ -15,7 +15,7 @@ Made by Mte90 - http://www.mte90.net
   Usage:
   <?php echo $argv[0]; ?> [local|staging|production|etc] [ftp]
   
-  The parameter it's needed for generate the wp-config by Movefile.
+  The first parameter it's needed for generate the wp-config by Movefile.
   With the second parameter upload the file generated via ftp to the host.
   With the --help, -help, -h, or -? options, you can get this help.
 
@@ -55,7 +55,7 @@ Made by Mte90 - http://www.mte90.net
 			}
 			
 			//Connect to the host and upload the wp-config generated
-			if ($argv[2] == 'ftp') {
+			if (isset($argv[2]) && $argv[2] == 'ftp') {
 				if ($argv[1] != 'local') {
 					echo 'Logging on the server...'."\n";
 					
@@ -71,7 +71,7 @@ Made by Mte90 - http://www.mte90.net
 					//remove the file generated
 					unlink('wp-config-'.$argv[1].'.php');
 					
-					echo (!$send) ? 'Upload Error!' : 'Upload Successful!'."\n";
+					echo (!$send) ? 'Upload Error!'."\n" : 'Upload Successful!'."\n";
 					
 					echo 'File wp-config-'.$argv[1].'.php removed!'."\n";
 				} else {
