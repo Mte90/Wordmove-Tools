@@ -30,6 +30,9 @@ Made by Mte90 - http://www.mte90.net
 			//The file that return the absolute path
 			file_put_contents('absolute.php','<?php echo dirname(__FILE__); ?>');
 			
+			//Move to the folder
+			ftp_chdir($connection, $movefile[$argv[1]]['wordpress_path']);
+			
 			//Upload the file and overwrite if exist on the host
 			$send = ftp_put($connection, 'absolute.php', 'absolute.php', FTP_ASCII);
 			
