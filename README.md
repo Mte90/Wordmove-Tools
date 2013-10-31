@@ -1,6 +1,4 @@
-#Another script? Seriously??
-wp-config-wordmove.php it's a simple script that which uses the data of Movefile (config file of [Wordmove](https://github.com/welaika/wordmove)) for generate the wp-config of the other host.  
-Uh and can also upload it on ftp on the choosen host!
+#Another scripts? Seriously??
 
 ##Requirements
 
@@ -27,6 +25,20 @@ With this script you insert the absolute_path in the Movefile
 `wordmove-wp-config [local|staging|production|etc]`
 
 The first parameter it's needed for get the absolute path of the host and insert in the Movefile.  
+
+##Wp Config Par
+With this script you can add some parameter in the wp-config.php 
+
+`wordmove-wp-config-par [security|debug|misc]`
+
+The parameter it's needed for choose the type of parameter to add to the wp-config.  
+
+  security: 
+	  DISALLOW_FILE_EDIT:	true
+  misc: 
+	  WP_POST_REVISIONS:	3
+  debug: 
+	  WP_DEBUG:    true
 
 #License
 GPL GPL GPL GPL GPL GPL GPL GPL GPL GPL GPL GPL!  
