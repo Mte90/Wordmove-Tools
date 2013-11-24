@@ -54,6 +54,9 @@ Made by Mte90 - http://www.mte90.net
 	  WP_POST_REVISIONS: 3
   debug: 
 	  WP_DEBUG:			 true
+	  WP_DEBUG_DISPLAY:	 false
+	  SAVEQUERIES:		 true
+	This parameters for debug working better with the Debug Bar plugin
 	  
   With the --help, -help, -h, or -? options, you can get this help.
 
@@ -89,12 +92,26 @@ Made by Mte90 - http://www.mte90.net
 				}
 			}elseif($argv[1] == 'debug'){
 				if(!isset($doit['WP_DEBUG'])){
-					if(startsWith($wpconfig[$i],"define('WP_DEBUG")) {
+					if(startsWith($wpconfig[$i],"define('WP_DEBUG'")) {
 						$wpconfig[$i] = "define('WP_DEBUG', true);\n";
 						$doit['WP_DEBUG'] = 1;
 					} elseif($i == $row) {
 						$wpconfig = array_insert($wpconfig,"define('WP_DEBUG', true);\n",$row);
 						$doit['WP_DEBUG'] = 1;
+					}
+					if(startsWith($wpconfig[$i],"define('WP_DEBUG_DISPLAY'")) {
+						$wpconfig[$i] = "define('WP_DEBUG_DISPLAY', false);\n";
+						$doit['WP_DEBUG_DISPLAY'] = 1;
+					} elseif($i == $row) {
+						$wpconfig = array_insert($wpconfig,"define('WP_DEBUG_DISPLAY', false);\n",$row);
+						$doit['WP_DEBUG_DISPLAY'] = 1;
+					}
+					if(startsWith($wpconfig[$i],"define('SAVEQUERIES'")) {
+						$wpconfig[$i] = "define('SAVEQUERIES', true);\n";
+						$doit['SAVEQUERIES'] = 1;
+					} elseif($i == $row) {
+						$wpconfig = array_insert($wpconfig,"define('SAVEQUERIES', true);\n",$row);
+						$doit['SAVEQUERIES'] = 1;
 					}
 				}
 			} else {
