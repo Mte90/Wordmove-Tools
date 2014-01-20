@@ -26,19 +26,27 @@ With this script you insert the absolute_path in the Movefile
 
 The first parameter it's needed for get the absolute path of the host and insert in the Movefile.  
 
-##Wp Config Par
+##Wp Config Paramaters
 With this script you can add some parameter in the wp-config.php 
 
 `wordmove-wp-config-par [security|debug|misc]`
 
 The parameter it's needed for choose the type of parameter to add to the wp-config.  
 
-  security: 
-	  DISALLOW_FILE_EDIT:	true
-  misc: 
-	  WP_POST_REVISIONS:	3
-  debug: 
-	  WP_DEBUG:    true
+* security:
+    * DISALLOW_FILE_EDIT:	true
+* misc:
+    * WP_POST_REVISIONS:	3
+* debug:
+    * WP_DEBUG:    true
+
+##Exclude Themes and Plugins
+With this script in the Movefile are added all the template and plugins that exists in wordpress installation, launch this and remove the lines that you don't need.
+
+`wordmove-exclude [-p|-t]`
+
+-p - plugins  
+-t - themes
 
 #License
 GPL GPL GPL GPL GPL GPL GPL GPL GPL GPL GPL GPL!  

@@ -1,0 +1,72 @@
+#!/usr/bin/php
+<?php
+ if ($argc == 1 || $argc > 3 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
+?>
+
+wordmove-exclude V 1.0
+Adds in Movefile in the the parameter exclude all themes or all plugins.
+Parameter:
+	-t - themes
+	-p - plugins
+
+Made by Mte90 - http://www.mte90.net
+  
+  With the --help, -help, -h, or -? options, you can get this help.
+
+<?php
+} else {
+	if(file_exists('Movefile')) {
+		//Read the movefile
+		$movefile = yaml_parse(file_get_contents('Movefile'));
+		
+		$exclude1 = array();
+		$exclude2 = array();
+		
+		if($argv[1] == '-t' || $argv[2] == '-t') {
+			echo 'Loading the themes...'."\n";
+			if ($handle = opendir('wp-content/themes')) {
+				while (false !== ($file = readdir($handle))) { 
+					if ($file != "." && $file != ".." && $file != "index.php") { 
+						if(is_dir('wp-content/themes/'.$file)) {
+							$exclude1[] = 'wp-content/themes/'.$file.'/'; 
+						}else {
+							$exclude1[] = 'wp-content/themes/'.$file; 
+						}
+					} 
+				}
+				closedir($handle); 
+			}
+		}
+						
+		if($argv[1] == '-p' || $argv[2] == '-p') {
+			echo 'Loading the plugins...'."\n";
+			if ($handle = opendir('wp-content/plugins')) {
+				while (false !== ($file = readdir($handle))) { 
+					if ($file != "." && $file != ".." && $file != "index.php") { 
+						if(is_dir('wp-content/plugins/'.$file)) {
+							$exclude2[] = 'wp-content/plugins/'.$file.'/'; 
+						}else {
+							$exclude2[] = 'wp-content/plugins/'.$file; 
+						}
+					} 
+				}
+				closedir($handle); 
+			}
+		}
+						
+		$exclude = array_merge($exclude1,$exclude2);
+		foreach ($movefile as $key => $enviroment) {
+			if($key != 'local') {
+				//Insert value
+				$movefile[$key]['exclude'] = array_merge($movefile[$key]['exclude'],$exclude);
+			}
+		}
+			
+		$yaml = yaml_emit($movefile);
+		
+		echo 'Save the Movefile...'."\n";
+		file_put_contents('Movefile',$yaml);
+		
+	}
+}
+?>
