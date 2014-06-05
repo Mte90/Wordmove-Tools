@@ -55,6 +55,7 @@ Made by Mte90 - http://www.mte90.net
 		}
 						
 		$exclude = array_merge($exclude1,$exclude2);
+		$exclude[] = 'node_modules/*';
 		foreach ($movefile as $key => $enviroment) {
 			if($key != 'local') {
 				//Insert value
