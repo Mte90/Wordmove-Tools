@@ -1,4 +1,4 @@
-#Aseful tools for auto detection or improvement
+#Useful tools for auto detection or improvement
 
 ##Requirements
 
@@ -8,11 +8,15 @@
 
 ##Install
 
-Move this scripts to /usr/local/bin
+    cd /tmp
+    git clone https://github.com/Mte90/Wordmove-tools
+    chmod +x ./Wordmove-tools/*.php
+    mv ./Wordmove-tools/*.php /usr/local/bin/
+    rm -r ./Wordmove-tools
 
 ##Syntax
 
-##Wp Config Generator
+##WordPress Config Generator
 With this script you can generate the wp-config with the data of Movefile  
 
 `wordmove-wp-config [local|staging|production|etc] [ftp]`
@@ -20,7 +24,7 @@ With this script you can generate the wp-config with the data of Movefile
 The first parameter it's needed for generate the wp-config by Movefile.  
 With the second parameter upload the file generated via ftp to the host.
 
-##Wp Config Paramaters
+##WordPress Config Paramaters
 With this script you can add some parameter in the wp-config.php 
 
 `wordmove-wp-config-par [security|debug|misc]`
