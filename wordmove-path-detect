@@ -3,14 +3,15 @@
  if ($argc == 1 || $argc > 3 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
 ?>
 
-wordmove-absolute-path V 1.1
-With this script is possible auto insert the absolute_path in the Movefile
+wordmove-path-detect V 1.0
+With this script is possible detect the path of wordpress. 
+Detect if httpdocs/publich_html exist in the remote host.
 Made by Mte90 - http://www.mte90.net
 
   Usage:
   <?php echo $argv[0]; ?> [staging|production|etc]
   
-  The first parameter it's needed for get the absolute path of the host and insert in the Movefile.
+  The first parameter it's needed for get the host.
   With the --help, -help, -h, or -? options, you can get this help.
 
 <?php
@@ -27,34 +28,23 @@ Made by Mte90 - http://www.mte90.net
                 
                 ftp_login($connection, $movefile[$argv[1]]['ftp']['user'], $movefile[$argv[1]]['ftp']['password']) 
                 or die('Username or password wrong.'."\n");
-                
-                //The file that return the absolute path
-                file_put_contents('absolute.php','<?php echo dirname(__FILE__); ?>');
-                
-                //Move to the folder
-                if($movefile[$argv[1]]['wordpress_path'] !== '/var/www/your_site') {
-                    ftp_chdir($connection, $movefile[$argv[1]]['wordpress_path']) or die('The path of Wordpress installation is wrong'."\n");
+                  
+                $ftp_string = 'ftp://'.$movefile[$argv[1]]['ftp']['user'].':'.$movefile[$argv[1]]['ftp']['password'].'@'.$movefile[$argv[1]]['ftp']['host'].'/';
+                //Auto Detection
+                echo 'Autodetection in progress';
+                if(is_dir($ftp_string.'httpdocs/')) {
+                    $movefile[$argv[1]]['wordpress_path'] = '/httpdocs/';
+                } elseif(is_dir($ftp_string.'public_html/')) {
+                    $movefile[$argv[1]]['wordpress_path'] = '/public_html/';
                 } else {
-                    die ('You don\'t have insert a valid path of Wordpress!'."\n");
+                    die('Path httpdocs/public_html not detected!'."\n");
                 }
-                
-                //Upload the file and overwrite if exist on the host
-                $send = ftp_put($connection, 'absolute.php', 'absolute.php', FTP_ASCII);
-                
-                $absolute = file_get_contents($movefile[$argv[1]]['vhost'].'/absolute.php');
-                
-                //remove the file generated
-                unlink('absolute.php');
-                ftp_delete($connection, 'absolute.php');
-                
-                //Insert value
-                $movefile[$argv[1]]['wordpress_absolute_path'] = $absolute;
                 
                 $yaml = yaml_emit($movefile);
                 
                 file_put_contents('Movefile',$yaml);
                 
-                echo (!$send) ? 'Upload Error!'."\n" : 'Movefile updated!'."\n".'Good job by Mte90!'."\n";
+                echo 'Movefile updated!'."\n".'Good job by Mte90!'."\n";
             } else {
                 die ('You don\'t have insert a valid FTP host!'."\n");
             }

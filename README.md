@@ -1,9 +1,10 @@
-#Another scripts? Seriously??
+#Aseful tools for auto detection or improvement
 
 ##Requirements
 
-* PHP-CLI
+* PHP5-CLI
 * YAML (`pecl install yaml`)
+* FTP data
 
 ##Install
 
@@ -19,13 +20,6 @@ With this script you can generate the wp-config with the data of Movefile
 The first parameter it's needed for generate the wp-config by Movefile.  
 With the second parameter upload the file generated via ftp to the host.
 
-##Absolute Path
-With this script you insert the absolute_path in the Movefile  
-
-`wordmove-wp-config [local|staging|production|etc]`
-
-The first parameter it's needed for get the absolute path of the host and insert in the Movefile.  
-
 ##Wp Config Paramaters
 With this script you can add some parameter in the wp-config.php 
 
@@ -40,13 +34,33 @@ The parameter it's needed for choose the type of parameter to add to the wp-conf
 * debug:
     * WP_DEBUG:    true
 
-##Exclude Themes and Plugins
+##Wordmove Exclude Themes and Plugins
 With this script in the Movefile are added all the template and plugins that exists in wordpress installation, launch this and remove the lines that you don't need.
 
 `wordmove-exclude [-p|-t]`
 
 -p - plugins  
 -t - themes
+
+##Wordmove Absolute Path
+With this script you insert the absolute_path in the Movefile  
+
+`wordmove-absolute-path [staging|production|etc]`
+
+The first parameter it's needed for get the absolute path of the host and insert in the Movefile.  
+
+##Wordmove Database
+With this script is possible auto insert the remote database data in the Movefile
+
+`wordmove-database [staging|production|etc]`
+
+The first parameter it's needed for get the database data of the host and insert in the Movefile.
+
+##Wordmove Wordpress Path Detection
+With this script is possible detect the path of wordpress. 
+Detect if httpdocs/publich_html exist in the remote host.
+
+`wordmove-path-detect [staging|production|etc]`
 
 #License
 GPL GPL GPL GPL GPL GPL GPL GPL GPL GPL GPL GPL!  

@@ -39,8 +39,8 @@ function array_insert(&$array, $element, $position) {
 if ($argc == 1 || $argc > 3 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
 ?>
 
-wordmove-wp-config-fpar V 1.0
-This script add to the wp-config.php some parameter ready 
+wordmove-wp-config-par V 1.0
+This script add to the wp-config.php some useful parameter
 Made by Mte90 - http://www.mte90.net
 
   Usage:

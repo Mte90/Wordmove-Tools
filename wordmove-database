@@ -3,14 +3,14 @@
  if ($argc == 1 || $argc > 3 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
 ?>
 
-wordmove-absolute-path V 1.1
-With this script is possible auto insert the absolute_path in the Movefile
+wordmove-database V 1.0
+With this script is possible auto insert the remote database data in the Movefile
 Made by Mte90 - http://www.mte90.net
 
   Usage:
   <?php echo $argv[0]; ?> [staging|production|etc]
   
-  The first parameter it's needed for get the absolute path of the host and insert in the Movefile.
+  The first parameter it's needed for get the database data of the host and insert in the Movefile.
   With the --help, -help, -h, or -? options, you can get this help.
 
 <?php
@@ -27,10 +27,7 @@ Made by Mte90 - http://www.mte90.net
                 
                 ftp_login($connection, $movefile[$argv[1]]['ftp']['user'], $movefile[$argv[1]]['ftp']['password']) 
                 or die('Username or password wrong.'."\n");
-                
-                //The file that return the absolute path
-                file_put_contents('absolute.php','<?php echo dirname(__FILE__); ?>');
-                
+                                
                 //Move to the folder
                 if($movefile[$argv[1]]['wordpress_path'] !== '/var/www/your_site') {
                     ftp_chdir($connection, $movefile[$argv[1]]['wordpress_path']) or die('The path of Wordpress installation is wrong'."\n");
@@ -38,23 +35,30 @@ Made by Mte90 - http://www.mte90.net
                     die ('You don\'t have insert a valid path of Wordpress!'."\n");
                 }
                 
-                //Upload the file and overwrite if exist on the host
-                $send = ftp_put($connection, 'absolute.php', 'absolute.php', FTP_ASCII);
+                //Download the file
+                $get = ftp_get($connection, 'wp-config-'.$argv[1].'.php', 'wp-config.php', FTP_ASCII) or die('wp-config.php not founded!'."\n");
                 
-                $absolute = file_get_contents($movefile[$argv[1]]['vhost'].'/absolute.php');
-                
-                //remove the file generated
-                unlink('absolute.php');
-                ftp_delete($connection, 'absolute.php');
+                //Remove reference to file wp-settings.php
+                $config = file_get_contents('wp-config-'.$argv[1].'.php');
+                $config = str_replace("require_once(ABSPATH . 'wp-settings.php');", '', $config);
+                file_put_contents('wp-config-'.$argv[1].'.php', $config);
+                //Include the file cleaned
+                include('wp-config-'.$argv[1].'.php');
                 
                 //Insert value
-                $movefile[$argv[1]]['wordpress_absolute_path'] = $absolute;
+                $movefile[$argv[1]]['database']['name'] = DB_NAME;
+                $movefile[$argv[1]]['database']['user'] = DB_USER;
+                $movefile[$argv[1]]['database']['password'] = DB_PASSWORD;
+                $movefile[$argv[1]]['database']['host'] = DB_HOST;
+                
+                //Remove the file downloaded
+                unlink('wp-config-'.$argv[1].'.php');
                 
                 $yaml = yaml_emit($movefile);
                 
                 file_put_contents('Movefile',$yaml);
                 
-                echo (!$send) ? 'Upload Error!'."\n" : 'Movefile updated!'."\n".'Good job by Mte90!'."\n";
+                echo (!$get) ? 'Download Error!'."\n" : 'Movefile updated!'."\n".'Good job by Mte90!'."\n";
             } else {
                 die ('You don\'t have insert a valid FTP host!'."\n");
             }
