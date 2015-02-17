@@ -8,7 +8,7 @@ function startsWith($haystack, $needle) {
 if ($argc == 1 || $argc > 3 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
 ?>
 
-wordmove-wp-config V 1.0a
+wordmove-wp-config V 1.0b
 This script generate a wp-config with the data of Movefile (WordMove).
 Made by Mte90 - http://www.mte90.net
 
@@ -28,7 +28,7 @@ Made by Mte90 - http://www.mte90.net
 		$wpconfig = file('wp-config.php');
 		if (array_key_exists($argv[1],$movefile)) {
 			//Replace the content!
-			for ($i = 11; $i <= 30; $i++) {
+			for ($i = 2; $i <= 50; $i++) {
 				if(startsWith($wpconfig[$i],"define('DB_NAME")) {
 					$wpconfig[$i] = "define('DB_NAME', '".$movefile[$argv[1]]['database']['name']."');\n";
 				}

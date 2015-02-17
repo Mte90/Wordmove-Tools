@@ -31,7 +31,7 @@ Made by Mte90 - http://www.mte90.net
                   
                 $ftp_string = 'ftp://'.$movefile[$argv[1]]['ftp']['user'].':'.$movefile[$argv[1]]['ftp']['password'].'@'.$movefile[$argv[1]]['ftp']['host'].'/';
                 //Auto Detection
-                echo 'Autodetection in progress';
+                echo 'Autodetection in progress'."\n";
                 if(is_dir($ftp_string.'httpdocs/')) {
                     $movefile[$argv[1]]['wordpress_path'] = '/httpdocs/';
                 } elseif(is_dir($ftp_string.'public_html/')) {
@@ -44,7 +44,8 @@ Made by Mte90 - http://www.mte90.net
                 
                 file_put_contents('Movefile',$yaml);
                 
-                echo 'Movefile updated!'."\n".'Good job by Mte90!'."\n";
+                echo 'Movefile updated!'."\n";
+                echo 'Good job by Mte90!'."\n";
             } else {
                 die ('You don\'t have insert a valid FTP host!'."\n");
             }
